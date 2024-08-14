@@ -6,3 +6,30 @@
   margin: 0;
   padding: 0;
 }
+
+.light {
+  --primary: 255, 90, 90;
+  --primary-content: 90, 0, 0;
+  --primary-dark: 255, 39, 39;
+  --primary-light: 255, 141;
+
+  --secondary: 172, 255, 90;
+  --secondary-content: 45, 90, 0;
+  --secondary-dark: 146, 255, 39;
+  --secondary-light: 198, 255, 141;
+
+  --background: 241, 239, 239;
+  --foreground: 251, 251, 251;
+  --border: 226, 221, 221;
+
+  --copy: 41, 35, 35;
+  --copy-light: 110, 94, 94;
+  --copy-lighter: 149, 132;
+
+  --success: 90, 255, 90;
+  --warning: 255, 255, 90;
+  --error: 255, 90, 90;
+  --success-content: 0, 90, 0;
+  --warning-content: 90, 90, 0;
+  --error-content: 90, 0, 0;
+}

@@ -1,8 +1,8 @@
 
 
-export default function Home() {
+export default function ProductPage() {
   return (
-    <main>
+    <main className="h-[300vh]">
       hello world
     </main>
   );
