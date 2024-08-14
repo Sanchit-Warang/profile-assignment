@@ -33,3 +33,45 @@
   --warning-content: 90, 90, 0;
   --error-content: 90, 0, 0;
 }
+
+.dark {
+  --primary: 255, 90, 90;
+  --primary-content: 90, 0, 0;
+  --primary-dark: 255, 39, 39;
+  --primary-light: 255, 141, 141;
+
+  --secondary: 172, 255;
+  --secondary-content: 45, 90, 0;
+  --secondary-dark: 146, 255, 39;
+  --secondary-light: 198, 255, 141;
+
+  --background: 27, 24, 24;
+  --foreground: 41, 35, 35;
+  --border: 69, 59, 59;
+  --copy: 251, 251, 251;
+  --copy-light: 220, 214, 214;
+  --copy-lighter: 172, 159, 159;
+
+  --success: 90, 255, 90;
+  --warning: 255, 255, 90;
+  --error: 255, 90, 90;
+  --success-content: 0, 90, 0;
+  --warning-content: 90, 90, 0;
+  --error-content: 90, 0, 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 767px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  html {
+    font-size: 16px;
+  }
+}

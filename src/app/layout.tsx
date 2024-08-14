@@ -17,12 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${inter.className}`}>
         <Providers>
-          <div className="h-[100vh] w-full flex bg-primary">
-            <SideBar />
-            <div className="bg-background flex-grow text-copy rounded-l-3xl overflow-y-auto">
+          <div className="transition-all h-[100vh] w-full flex flex-col-reverse md:flex-row bg-primary">
+            <SideBar className="h-[7vh]" />
+            <div className="transition-all bg-background flex-grow text-copy rounded-b-3xl md:rounded-l-3xl overflow-y-auto">
               <div className="mx-10 my-10">{children}</div>
             </div>
           </div>
