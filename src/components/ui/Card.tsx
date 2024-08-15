@@ -4,7 +4,10 @@ const Card = ({ children, className, ...props }: CardProps) => {
   return (
     <div
       {...props}
-      className={cn("transition-all rounded-lg border border-border p-5 bg-foreground", className)}
+      className={cn(
+        ' rounded-3xl border-2 border-border p-5 bg-foreground shadow-md ',
+        className
+      )}
     >
       {children}
     </div>

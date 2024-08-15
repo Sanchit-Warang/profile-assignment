@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${inter.className}`}>
         <Providers>
-          <div className="transition-all h-[100vh] w-full flex flex-col-reverse md:flex-row bg-primary">
-            <SideBar className="h-[7vh]" />
-            <div className="transition-all bg-background flex-grow text-copy rounded-b-3xl md:rounded-l-3xl overflow-y-auto">
+          <div className="h-[100dvh] w-full flex flex-col-reverse md:flex-row bg-primary">
+            <SideBar className="h-[7dvh]" />
+            <div className=" bg-background flex-grow text-copy rounded-b-3xl md:rounded-l-3xl md:rounded-r-none  overflow-y-auto">
               <div className="mx-10 my-10">{children}</div>
             </div>
           </div>
