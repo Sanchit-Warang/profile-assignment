@@ -1,12 +1,13 @@
 import { create } from 'zustand'
-import { User } from '@prisma/client'
+import { Token } from '@/lib/auth/session'
 
 export type AuthStore = {
-  user: User
-  setUser: () => void
+  user: Token | null
+  // eslint-disable-next-line no-unused-vars
+  setUser: (user: Token | null) => void
 }
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
-  setUser: (user: User) => set({ user }),
+  setUser: (user: Token | null) => set({ user }),
 }))

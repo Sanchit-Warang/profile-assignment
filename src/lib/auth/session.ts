@@ -36,7 +36,7 @@ export async function decrypt(token: string) {
   }
 }
 
-type Token = {
+export type Token = {
   id: number
   name: string
   email: string

@@ -3,11 +3,16 @@ import { cn } from '@/lib/utils'
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import SideBarButton from '../ui/SideBarButton'
-import { User, ShoppingCart, Boxes, UserPlus } from 'lucide-react'
+import { User, ShoppingCart, Boxes, UserPlus, LogOut } from 'lucide-react'
+import { useAuthStore } from '@/zustand/AuthStore'
+import { useLogoutMutation } from '@/hooks/auth'
+import Avatar from 'react-avatar';
 
 export type SideBarProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {}
 const SideBar = ({ className }: SideBarProps) => {
+  const logOutMutation = useLogoutMutation()
   const { theme, setTheme } = useTheme()
+  const user = useAuthStore((state) => state.user)
 
   return (
     <div className={cn('h-[100%] bg-primary sticky p-5', className)}>
@@ -20,10 +25,24 @@ const SideBar = ({ className }: SideBarProps) => {
         >
           {theme === 'light' ? <Sun /> : <Moon />}
         </button>
+        {user && <Avatar name={user.name} size='55' round />}
         <SideBarButton url={'/'} icon={<Boxes />} />
-        <SideBarButton url={'/login'} icon={<User />} />
-        <SideBarButton url={'/cart'} icon={<ShoppingCart />} />
-        <SideBarButton url={'/register'} icon={<UserPlus />} />
+        {!user && (
+          <>
+            <SideBarButton url={'/login'} icon={<User />} />
+            <SideBarButton url={'/register'} icon={<UserPlus />} />
+          </>
+        )}
+        {user && (
+          <>
+            <SideBarButton
+              isDisabled={logOutMutation.isPending}
+              cb={() => logOutMutation.mutateAsync()}
+              icon={<LogOut />}
+            />
+            <SideBarButton url={'/cart'} icon={<ShoppingCart />} />
+          </>
+        )}
       </div>
     </div>
   )

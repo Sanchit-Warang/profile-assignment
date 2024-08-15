@@ -4,7 +4,7 @@ import errHand from '@/utils/errhand'
 import { registerBody, loginBody } from '@/schema/body'
 import { z } from 'zod'
 import { hash, compare } from 'bcrypt'
-import { createSession } from '@/lib/auth/session'
+import { createSession, deleteSession } from '@/lib/auth/session'
 
 export const register = errHand(async (user: z.infer<typeof registerBody>) => {
   const existingUser = await db.user.findUnique({
@@ -59,4 +59,9 @@ export const login = errHand(async (user: z.infer<typeof loginBody>) => {
   })
 
   return existingUser
+})
+
+export const logout = errHand(async () => {
+  await deleteSession()
+  return null
 })
