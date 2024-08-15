@@ -4,42 +4,40 @@ import Input from '../ui/Input'
 import Button from '../ui/Button'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { registerBody } from '@/schema/body'
+import { loginBody } from '@/schema/body'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRegistrationMutaion } from '@/hooks/auth'
+import { useLoginMutation } from '@/hooks/auth'
 
-const RegisterCard = () => {
-  const registrationMutation = useRegistrationMutaion()
+const LoginCard = () => {
+  const loginMutation = useLoginMutation()
 
-  const form = useForm<z.infer<typeof registerBody>>({
+  const form = useForm<z.infer<typeof loginBody>>({
     defaultValues: {
-      name: '',
       email: '',
       password: '',
     },
-    resolver: zodResolver(registerBody),
+    resolver: zodResolver(loginBody),
   })
 
-  const onSubmit: SubmitHandler<z.infer<typeof registerBody>> = async (
-    data
-  ) => {
-    await registrationMutation.mutateAsync(data)
+  const onSubmit: SubmitHandler<z.infer<typeof loginBody>> = async (data) => {
+    await loginMutation.mutateAsync(data)
+  }
+
+  const guestLogin = async () => {
+    await loginMutation.mutateAsync({
+      email: 'guest@gmail.com',
+      password: 'guest',
+    })
   }
 
   return (
     <Card className="flex flex-col space-y-3 p-10  items-center w-[80vw] md:w-[30vw]">
-      <p className="text-lg font-medium">Register Form</p>
+      <p className="text-lg font-medium">Login Form</p>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-3 w-full"
       >
-        <Input
-          {...form.register('name')}
-          defaultValue=""
-          error={form.formState.errors.name}
-          placeholder="Name"
-        />
         <Input
           {...form.register('email')}
           defaultValue=""
@@ -55,22 +53,23 @@ const RegisterCard = () => {
         />
         <center>
           <Button
-            isDisabled={registrationMutation.isPending}
+            isDisabled={loginMutation.isPending}
             typeof="submit"
             className="w-[100px]"
           >
-            Register
+            Login
           </Button>
         </center>
       </form>
+      <Button isDisabled={loginMutation.isPending} onClick={() => guestLogin()} variant='secondary'>Guest Login</Button>
       <Link
-        href="/login"
+        href="/register"
         className="text-xs hover:text-primary hover:underline"
       >
-        Already have an account, Login
+        Create new account
       </Link>
     </Card>
   )
 }
 
-export default RegisterCard
+export default LoginCard

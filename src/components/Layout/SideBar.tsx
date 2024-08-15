@@ -11,7 +11,7 @@ const SideBar = ({ className }: SideBarProps) => {
 
   return (
     <div className={cn('h-[100%] bg-primary sticky p-5', className)}>
-      <div className="flex flex-row  md:flex-col justify-center items-center md:space-y-7 space-x-4 md:space-x-0">
+      <div className="sidebar flex flex-row  md:flex-col justify-center items-center md:space-y-7 space-x-4 md:space-x-0 ">
         <button
           suppressHydrationWarning
           className="text-primary-content
