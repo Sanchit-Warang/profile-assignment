@@ -2,14 +2,10 @@
 import { useGetCartQuery } from '@/hooks/cart'
 import Card from '../ui/Card'
 import CartItem from './CartItem'
-import { useEffect } from 'react'
+
 
 const CartList = () => {
   const getCart = useGetCartQuery()
-
-  useEffect(() => {
-    console.log(getCart.data)
-  }, [getCart.data])
 
   if (getCart.error) return <div>{JSON.stringify(getCart.error)}</div>
   if (getCart.isLoading) return <div>Loading...</div>

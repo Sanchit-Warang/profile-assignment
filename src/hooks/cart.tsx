@@ -10,7 +10,7 @@ import { Product } from '@prisma/client'
 export const useGetCartQuery = () => {
   const user = useAuthStore((state) => state.user)
   return useQuery({
-    queryKey: ['cart', user ? user.id : null],
+    queryKey: ['cart'],
     queryFn: async () => {
       if (!user) throw new Error('User not authenticated')
       const { error, success } = await getCart(user.id)
@@ -36,37 +36,30 @@ export const useAddToCartMutation = () => {
     },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({
-        queryKey: ['cart', variables.userId],
+        queryKey: ['cart'],
       })
 
-      const previousCart = await queryClient.getQueryData([
+      const previousCart = (await queryClient.getQueryData([
         'cart',
-        variables.userId,
-      ]) as PopulatedCart[]
+      ])) as PopulatedCart[]
 
-      await queryClient.setQueryData(
-        ['cart', variables.userId],
-        (oldCart: PopulatedCart[]) => {
-          if (oldCart) {
-            return [...oldCart, { ...variables.product, quantity: 1 }]
-          }
-          return [{ ...variables.product, quantity: 1 }]
+      await queryClient.setQueryData(['cart'], (oldCart: PopulatedCart[]) => {
+        if (oldCart) {
+          return [...oldCart, { ...variables.product, quantity: 1 }]
         }
-      )
+        return [{ ...variables.product, quantity: 1 }]
+      })
       return { previousCart }
     },
     onError: async (error, variables, context) => {
       if (context?.previousCart) {
-        await queryClient.setQueryData(
-          ['cart', variables.userId],
-          context.previousCart
-        )
+        await queryClient.setQueryData(['cart'], context.previousCart)
       }
       toast.error(error.message)
     },
-    onSettled: async (_temp, _temp2, variables) => {
+    onSettled: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['cart', variables.userId],
+        queryKey: ['cart'],
       })
     },
     onSuccess: () => {
@@ -95,34 +88,27 @@ export const useDeleteItemMutation = () => {
     },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({
-        queryKey: ['cart', variables.userId],
+        queryKey: ['cart'],
       })
 
-      const previousCart = await queryClient.getQueryData([
+      const previousCart = (await queryClient.getQueryData([
         'cart',
-        variables.userId,
-      ]) as PopulatedCart[]
+      ])) as PopulatedCart[]
 
-      await queryClient.setQueryData(
-        ['cart', variables.userId],
-        (oldCart: PopulatedCart[]) => {
-          return oldCart.filter(({ id }) => id !== variables.productId)
-        }
-      )
+      await queryClient.setQueryData(['cart'], (oldCart: PopulatedCart[]) => {
+        return oldCart.filter(({ id }) => id !== variables.productId)
+      })
       return { previousCart }
     },
     onError: async (error, variables, context) => {
       if (context?.previousCart) {
-        await queryClient.setQueryData(
-          ['cart', variables.userId],
-          context.previousCart
-        )
+        await queryClient.setQueryData(['cart'], context.previousCart)
       }
       toast.error(error.message)
     },
-    onSettled: async (_temp, _temp2, variables) => {
+    onSettled: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['cart', variables.userId],
+        queryKey: ['cart'],
       })
     },
     onSuccess: () => {
