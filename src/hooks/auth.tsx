@@ -6,8 +6,10 @@ import { registerBody, loginBody } from '@/schema/body'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/zustand/AuthStore'
 import toast from 'react-hot-toast'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useRegistrationMutaion = () => {
+  const queryClient = useQueryClient()
   const router = useRouter()
   return useMutation({
     mutationFn: async (data: z.infer<typeof registerBody>) => {
@@ -16,6 +18,7 @@ export const useRegistrationMutaion = () => {
       if (success) return success
     },
     onSuccess: () => {
+      queryClient.invalidateQueries()
       toast.success('Registered successfully')
       router.replace('/')
     },
@@ -26,6 +29,7 @@ export const useRegistrationMutaion = () => {
 }
 
 export const useLoginMutation = () => {
+  const queryClient = useQueryClient()
   const router = useRouter()
   return useMutation({
     mutationFn: async (data: z.infer<typeof loginBody>) => {
@@ -35,6 +39,7 @@ export const useLoginMutation = () => {
       if (success) return success
     },
     onSuccess: () => {
+      queryClient.invalidateQueries()
       toast.success('Logged in successfully')
       router.replace('/')
     },
@@ -45,6 +50,7 @@ export const useLoginMutation = () => {
 }
 
 export const useLogoutMutation = () => {
+  const queryClient = useQueryClient()
   const router = useRouter()
   const setUser = useAuthStore((state) => state.setUser)
   return useMutation({
@@ -55,8 +61,9 @@ export const useLogoutMutation = () => {
       if (success) return success
     },
     onSuccess: () => {
-      toast.success('Logged out successfully')
       setUser(null)
+      queryClient.invalidateQueries()
+      toast.success('Logged out successfully')
       router.replace('/')
     },
     onError: (error) => {

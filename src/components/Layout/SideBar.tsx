@@ -3,10 +3,11 @@ import { cn } from '@/lib/utils'
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import SideBarButton from '../ui/SideBarButton'
-import { User, ShoppingCart, Boxes, UserPlus, LogOut } from 'lucide-react'
+import { User, Boxes, UserPlus, LogOut } from 'lucide-react'
 import { useAuthStore } from '@/zustand/AuthStore'
 import { useLogoutMutation } from '@/hooks/auth'
 import Avataar from '../ui/Avataar'
+import CartSideButton from '../Cart/CartSideButton'
 
 export type SideBarProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {}
 const SideBar = ({ className }: SideBarProps) => {
@@ -40,7 +41,7 @@ const SideBar = ({ className }: SideBarProps) => {
               cb={() => logOutMutation.mutateAsync()}
               icon={<LogOut />}
             />
-            <SideBarButton url={'/cart'} icon={<ShoppingCart />} />
+            <CartSideButton />
           </>
         )}
       </div>

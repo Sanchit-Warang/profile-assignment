@@ -13,7 +13,7 @@ const ProductList = () => {
 
   return (
     <>
-      {user ? <div className="text-xl">Welcome {user.name}</div> : null}
+      {user ? <div className="text-xl">Welcome {user.name} {user.id}</div> : null}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         {products.data.map((product) => {
           return <ProductCard key={product.id} product={product} />
