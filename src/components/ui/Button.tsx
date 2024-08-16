@@ -1,8 +1,9 @@
+'use client'
 import { cva } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 export type ButtonProps = {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'danger'
   isDisabled?: boolean
 } & React.HTMLAttributes<HTMLButtonElement>
 
@@ -13,12 +14,12 @@ const buttonVariants = cva(
       variant: {
         primary: 'bg-primary text-primary-content',
         secondary: 'bg-secondary text-secondary-content',
+        danger: 'bg-error text-error-content',
       },
       isDisabled: {
         true: 'opacity-50 cursor-not-allowed',
         false: '',
       },
-      
     },
     defaultVariants: {
       variant: 'primary',

@@ -21,8 +21,8 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <Providers>
           <div className="h-[100dvh] w-full flex flex-col-reverse md:flex-row bg-primary">
-            <SideBar className="h-[9dvh] md:h-auto" />
-            <div className=" bg-background shadow-xl flex-grow text-copy rounded-b-3xl md:rounded-l-3xl md:rounded-r-none  overflow-y-auto">
+            <SideBar className="h-[9dvh] md:h-auto bg-opacity-0" />
+            <div className=" bg-background shadow-2xl flex-grow text-copy rounded-b-3xl md:rounded-l-3xl md:rounded-r-none  overflow-y-auto">
               <div className="mx-10 my-10">{children}</div>
             </div>
           </div>

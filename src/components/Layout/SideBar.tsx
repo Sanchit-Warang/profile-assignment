@@ -16,7 +16,7 @@ const SideBar = ({ className }: SideBarProps) => {
   const user = useAuthStore((state) => state.user)
 
   return (
-    <div className={cn('h-[100%] bg-primary sticky p-5', className)}>
+    <div className={cn('h-[100%] bg-opacity-0 sticky p-5', className)}>
       <div className="sidebar flex flex-row  md:flex-col justify-center items-center md:space-y-7 space-x-4 md:space-x-0 ">
         <button
           suppressHydrationWarning

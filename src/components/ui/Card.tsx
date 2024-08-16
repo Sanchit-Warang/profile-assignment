@@ -1,3 +1,4 @@
+'use client'
 export type CardProps = {} & React.HTMLAttributes<HTMLDivElement>
 import { cn } from '@/lib/utils'
 const Card = ({ children, className, ...props }: CardProps) => {

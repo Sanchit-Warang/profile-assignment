@@ -1,5 +1,3 @@
-import { CartProduct, Cart, Product } from '@prisma/client'
+import { Product } from '@prisma/client'
 
-export type PopulatedCart = Cart & {
-  products: (CartProduct & { product: Product })[]
-}
+export type PopulatedCart = Product & { quantity: number }

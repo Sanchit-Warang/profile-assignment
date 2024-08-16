@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { useAuthStore } from '@/zustand/AuthStore'
 import { addItemToCart, updateProductQuantity } from '@/server/Mutations'
 import { getCart } from '@/server/Query'
+import { PopulatedCart } from '@/types'
+import { Product } from '@prisma/client'
 
 export const useGetCartQuery = () => {
   const user = useAuthStore((state) => state.user)
@@ -23,13 +25,12 @@ export const useAddToCartMutation = () => {
   return useMutation({
     mutationFn: async ({
       userId,
-      productId,
+      product,
     }: {
       userId: number
-      productId: number
+      product: Product
     }) => {
-      const { error, success } = await addItemToCart(userId, productId)
-      console.log('Sanchit', error)
+      const { error, success } = await addItemToCart(userId, product.id)
       if (error) throw new Error(error)
       if (success) return success
     },
@@ -38,40 +39,21 @@ export const useAddToCartMutation = () => {
         queryKey: ['cart', variables.userId],
       })
 
-      await queryClient.cancelQueries({
-        queryKey: ['product', 'exists', variables.userId, variables.productId],
-      })
-
       const previousCart = queryClient.getQueryData([
         'cart',
         variables.userId,
-      ]) as number[]
-
-      const previousProductExists = queryClient.getQueryData([
-        'product',
-        'exists',
-        variables.userId,
-        variables.productId,
-      ])
+      ]) as PopulatedCart[]
 
       queryClient.setQueryData(
         ['cart', variables.userId],
-        (oldCart: number[]) => {
+        (oldCart: PopulatedCart[]) => {
           if (oldCart) {
-            return [...oldCart, variables.productId]
+            return [...oldCart, { ...variables.product, quantity: 1 }]
           }
-          return [variables.productId]
+          return [{ ...variables.product, quantity: 1 }]
         }
       )
-
-      queryClient.setQueryData(
-        ['product', 'exists', variables.userId, variables.productId],
-        () => {
-          return true
-        }
-      )
-
-      return { previousCart, previousProductExists }
+      return { previousCart }
     },
     onError: (error, variables, context) => {
       if (context?.previousCart) {
@@ -80,22 +62,11 @@ export const useAddToCartMutation = () => {
           context.previousCart
         )
       }
-
-      if (context?.previousProductExists) {
-        queryClient.setQueryData(
-          ['product', 'exists', variables.userId, variables.productId],
-          context.previousProductExists
-        )
-      }
-
       toast.error(error.message)
     },
     onSettled: (_temp, _temp2, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['cart', variables.userId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['product', 'exists', variables.userId, variables.productId],
       })
     },
     onSuccess: () => {
@@ -114,7 +85,11 @@ export const useDeleteItemMutation = () => {
       userId: number
       productId: number
     }) => {
-      const { error, success } = await updateProductQuantity(userId, productId, 0)
+      const { error, success } = await updateProductQuantity(
+        userId,
+        productId,
+        0
+      )
       if (error) throw new Error(error)
       if (success) return success
     },
@@ -123,37 +98,18 @@ export const useDeleteItemMutation = () => {
         queryKey: ['cart', variables.userId],
       })
 
-      await queryClient.cancelQueries({
-        queryKey: ['product', 'exists', variables.userId, variables.productId],
-      })
-
       const previousCart = queryClient.getQueryData([
         'cart',
         variables.userId,
-      ]) as number[]
-
-      const previousProductExists = queryClient.getQueryData([
-        'product',
-        'exists',
-        variables.userId,
-        variables.productId,
-      ])
+      ]) as PopulatedCart[]
 
       queryClient.setQueryData(
         ['cart', variables.userId],
-        (oldCart: number[]) => {
-          return oldCart.filter((id) => id !== variables.productId)
+        (oldCart: PopulatedCart[]) => {
+          return oldCart.filter(({ id }) => id !== variables.productId)
         }
       )
-
-      queryClient.setQueryData(
-        ['product', 'exists', variables.userId, variables.productId],
-        () => {
-          return false
-        }
-      )
-
-      return { previousCart, previousProductExists }
+      return { previousCart }
     },
     onError: (error, variables, context) => {
       if (context?.previousCart) {
@@ -162,26 +118,15 @@ export const useDeleteItemMutation = () => {
           context.previousCart
         )
       }
-
-      if (context?.previousProductExists) {
-        queryClient.setQueryData(
-          ['product', 'exists', variables.userId, variables.productId],
-          context.previousProductExists
-        )
-      }
-
       toast.error(error.message)
     },
     onSettled: (_temp, _temp2, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['cart', variables.userId],
       })
-      queryClient.invalidateQueries({
-        queryKey: ['product', 'exists', variables.userId, variables.productId],
-      })
     },
     onSuccess: () => {
-      toast.success('Removed to cart')
+      toast.success('Removed from cart')
     },
   })
 }

@@ -5,8 +5,7 @@ import Image from 'next/image'
 import Button from '../ui/Button'
 import { useAuthStore } from '@/zustand/AuthStore'
 import { useRouter } from 'next/navigation'
-import { useAddToCartMutation } from '@/hooks/cart'
-import { useGetProductExistsInCartQuery } from '@/hooks/products'
+import { useAddToCartMutation, useGetCartQuery } from '@/hooks/cart'
 
 export type ProductCardProps = {
   product: Product
@@ -14,17 +13,21 @@ export type ProductCardProps = {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const user = useAuthStore((state) => state.user)
-  const getProductExistsInCartQuery = useGetProductExistsInCartQuery(product.id)
   const router = useRouter()
   const addToCartMutation = useAddToCartMutation()
+  const getCart = useGetCartQuery()
 
   const handleClick = () => {
     if (!user) {
       router.replace('/login')
       return
     }
-    addToCartMutation.mutate({ userId: user.id, productId: product.id })
+    addToCartMutation.mutate({ userId: user.id, product: product })
   }
+
+  const existInCart = getCart.data
+    ? getCart.data.some((p) => p.id === product.id)
+    : false
 
   return (
     <Card className="rounded-3xl transition-all duration-500 space-y-3 hover:bg-primary/20">
@@ -45,14 +48,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </div>
       <div className="w-full">
         <center>
-          {getProductExistsInCartQuery.data &&
-          !getProductExistsInCartQuery.isLoading ? (
+          {!user && (
+            <Button onClick={() => handleClick()} className="rounded-xl">
+              Add to cart
+            </Button>
+          )}
+          {user && existInCart ? (
             <Button variant="secondary" onClick={() => router.replace('/cart')}>
               Go to Cart
             </Button>
           ) : (
             <Button
-              isDisabled={getProductExistsInCartQuery.isLoading}
+              isDisabled={existInCart}
               onClick={() => handleClick()}
               className="rounded-xl"
             >
