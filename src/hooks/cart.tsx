@@ -39,12 +39,12 @@ export const useAddToCartMutation = () => {
         queryKey: ['cart', variables.userId],
       })
 
-      const previousCart = queryClient.getQueryData([
+      const previousCart = await queryClient.getQueryData([
         'cart',
         variables.userId,
       ]) as PopulatedCart[]
 
-      queryClient.setQueryData(
+      await queryClient.setQueryData(
         ['cart', variables.userId],
         (oldCart: PopulatedCart[]) => {
           if (oldCart) {
@@ -55,17 +55,17 @@ export const useAddToCartMutation = () => {
       )
       return { previousCart }
     },
-    onError: (error, variables, context) => {
+    onError: async (error, variables, context) => {
       if (context?.previousCart) {
-        queryClient.setQueryData(
+        await queryClient.setQueryData(
           ['cart', variables.userId],
           context.previousCart
         )
       }
       toast.error(error.message)
     },
-    onSettled: (_temp, _temp2, variables) => {
-      queryClient.invalidateQueries({
+    onSettled: async (_temp, _temp2, variables) => {
+      await queryClient.invalidateQueries({
         queryKey: ['cart', variables.userId],
       })
     },
@@ -98,12 +98,12 @@ export const useDeleteItemMutation = () => {
         queryKey: ['cart', variables.userId],
       })
 
-      const previousCart = queryClient.getQueryData([
+      const previousCart = await queryClient.getQueryData([
         'cart',
         variables.userId,
       ]) as PopulatedCart[]
 
-      queryClient.setQueryData(
+      await queryClient.setQueryData(
         ['cart', variables.userId],
         (oldCart: PopulatedCart[]) => {
           return oldCart.filter(({ id }) => id !== variables.productId)
@@ -111,17 +111,17 @@ export const useDeleteItemMutation = () => {
       )
       return { previousCart }
     },
-    onError: (error, variables, context) => {
+    onError: async (error, variables, context) => {
       if (context?.previousCart) {
-        queryClient.setQueryData(
+        await queryClient.setQueryData(
           ['cart', variables.userId],
           context.previousCart
         )
       }
       toast.error(error.message)
     },
-    onSettled: (_temp, _temp2, variables) => {
-      queryClient.invalidateQueries({
+    onSettled: async (_temp, _temp2, variables) => {
+      await queryClient.invalidateQueries({
         queryKey: ['cart', variables.userId],
       })
     },

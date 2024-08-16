@@ -21,7 +21,7 @@ const CartItem = ({ className, product, ...props }: CartItemProps) => {
       className={cn('w-full flex items-center gap-4', className)}
       {...props}
     >
-      <div className="w-[15%] overflow-hidden rounded-xl">
+      <div className="w-[50%] md:w-[20%] overflow-hidden rounded-xl">
         <Image
           src={product.image}
           alt={product.name}
@@ -33,10 +33,10 @@ const CartItem = ({ className, product, ...props }: CartItemProps) => {
       {product.name}
       {user && (
         <Button
-          className="ml-auto py-2 px-2 min-w-0 rounded-full"
+          className="ml-auto py-2 px-2 min-w-0 rounded-full flex items-center justify-center text-sm" 
           variant="danger"
-          onClick={() =>
-            deleteItemMutation.mutate({
+          onClick={async () =>
+            await deleteItemMutation.mutateAsync({
               userId: user.id,
               productId: product.id,
             })

@@ -17,12 +17,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const addToCartMutation = useAddToCartMutation()
   const getCart = useGetCartQuery()
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!user) {
       router.replace('/login')
       return
     }
-    addToCartMutation.mutate({ userId: user.id, product: product })
+    await addToCartMutation.mutateAsync({ userId: user.id, product: product })
   }
 
   const existInCart = getCart.data
@@ -49,7 +49,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="w-full">
         <center>
           {!user && (
-            <Button onClick={() => handleClick()} className="rounded-xl">
+            <Button onClick={async () => await handleClick()} className="rounded-xl">
               Add to cart
             </Button>
           )}
@@ -60,7 +60,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           ) : (
             <Button
               isDisabled={existInCart}
-              onClick={() => handleClick()}
+              onClick={async () => await handleClick()}
               className="rounded-xl"
             >
               Add to cart

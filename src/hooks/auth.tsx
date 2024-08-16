@@ -17,8 +17,8 @@ export const useRegistrationMutaion = () => {
       if (error) throw new Error(error)
       if (success) return success
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries()
+    onSuccess: async () => {
+      await queryClient.invalidateQueries()
       toast.success('Registered successfully')
       router.replace('/')
     },
@@ -38,8 +38,8 @@ export const useLoginMutation = () => {
       if (error) throw new Error(error)
       if (success) return success
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries()
+    onSuccess: async() => {
+      await queryClient.invalidateQueries()
       toast.success('Logged in successfully')
       router.replace('/')
     },
@@ -60,9 +60,9 @@ export const useLogoutMutation = () => {
       if (error) throw new Error(error)
       if (success) return success
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       setUser(null)
-      queryClient.invalidateQueries()
+      await queryClient.invalidateQueries()
       toast.success('Logged out successfully')
       router.replace('/')
     },
