@@ -6,7 +6,7 @@ import SideBarButton from '../ui/SideBarButton'
 import { User, ShoppingCart, Boxes, UserPlus, LogOut } from 'lucide-react'
 import { useAuthStore } from '@/zustand/AuthStore'
 import { useLogoutMutation } from '@/hooks/auth'
-import Avatar from 'react-avatar';
+import Avataar from '../ui/Avataar'
 
 export type SideBarProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {}
 const SideBar = ({ className }: SideBarProps) => {
@@ -25,7 +25,7 @@ const SideBar = ({ className }: SideBarProps) => {
         >
           {theme === 'light' ? <Sun /> : <Moon />}
         </button>
-        {user && <Avatar name={user.name} size='55' round />}
+        {user && <Avataar name={user.name} />}
         <SideBarButton url={'/'} icon={<Boxes />} />
         {!user && (
           <>
