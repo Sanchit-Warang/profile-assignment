@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 export type ButtonProps = {
-  variant?: 'primary' | 'secondary' | 'danger'
+  variant?: 'primary' | 'secondary' | 'danger' | 'success'
   isDisabled?: boolean
 } & React.HTMLAttributes<HTMLButtonElement>
 
@@ -15,6 +15,7 @@ const buttonVariants = cva(
         primary: 'bg-primary text-primary-content',
         secondary: 'bg-secondary text-secondary-content',
         danger: 'bg-error text-error-content',
+        success: 'bg-success text-success-content',
       },
       isDisabled: {
         true: 'opacity-50 cursor-not-allowed',

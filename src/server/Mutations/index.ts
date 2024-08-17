@@ -83,8 +83,8 @@ export const addItemToCart = errHand(
     if (userId !== user.id) {
       throw new Error('User does not match')
     }
-    
-    console.log('Sanchit',userId)
+
+    console.log('Sanchit', userId)
 
     const cart = await db.cart.upsert({
       where: { userId },
@@ -146,10 +146,10 @@ export const updateProductQuantity = errHand(
           productId: productId,
         },
       },
-    });
+    })
 
     if (!existingCartProduct) {
-      throw new Error('Product not found in cart');
+      throw new Error('Product not found in cart')
     }
 
     if (quantity <= 0) {
@@ -158,8 +158,8 @@ export const updateProductQuantity = errHand(
         where: {
           id: existingCartProduct.id,
         },
-      });
-      return 'Product removed from cart';
+      })
+      return 'Product removed from cart'
     } else {
       // Update the quantity of the product in the cart
       await db.cartProduct.update({
@@ -169,9 +169,72 @@ export const updateProductQuantity = errHand(
         data: {
           quantity: quantity,
         },
-      });
-      return 'Quantity updated successfully';
+      })
+      return 'Quantity updated successfully'
     }
-
   }
 )
+
+export const addDiscountCode = errHand(async (userId: number, code: string) => {
+  const user = await verifySession()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  if (userId !== user.id) {
+    throw new Error('User does not match')
+  }
+
+  if (!code) {
+    throw new Error('Code is required')
+  }
+
+  if (code != process.env.D_10 && code != process.env.D_20) {
+    throw new Error('Invalid code')
+  }
+
+  if (code === process.env.D_10) {
+    const cart = await db.cart.findUnique({
+      where: {
+        userId: userId,
+      },
+    })
+
+    if (!cart) {
+      throw new Error('Cart not found')
+    }
+
+    await db.cart.update({
+      where: {
+        id: cart.id,
+      },
+      data: {
+        discount: 10,
+      },
+    })
+
+    return '10% discount applied'
+  }
+
+  const cart = await db.cart.findUnique({
+    where: {
+      userId: userId,
+    },
+  })
+
+  if (!cart) {
+    throw new Error('Cart not found')
+  }
+
+  await db.cart.update({
+    where: {
+      id: cart.id,
+    },
+    data: {
+      discount: 20,
+    },
+  })
+
+  return '20% discount applied'
+})

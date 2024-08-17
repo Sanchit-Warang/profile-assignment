@@ -2,8 +2,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '@/zustand/AuthStore'
-import { addItemToCart, updateProductQuantity } from '@/server/Mutations'
-import { getCart } from '@/server/Query'
+import {
+  addItemToCart,
+  updateProductQuantity,
+  addDiscountCode,
+} from '@/server/Mutations'
+import { getCart, getDiscount } from '@/server/Query'
 import { PopulatedCart } from '@/types'
 import { Product } from '@prisma/client'
 
@@ -16,6 +20,21 @@ export const useGetCartQuery = () => {
       const { error, success } = await getCart(user.id)
       if (error) throw new Error(error)
       if (success) return success
+    },
+  })
+}
+
+export const useGetDiscountQuery = () => {
+  const user = useAuthStore((state) => state.user)
+  return useQuery({
+    queryKey: ['cart', 'discount'],
+    queryFn: async () => {
+      if (!user) throw new Error('User not authenticated')
+      const { error, success } = await getDiscount(user.id)
+      if (error) throw new Error(error)
+      if (success !== undefined) {
+        return success
+      }
     },
   })
 }
@@ -66,20 +85,22 @@ export const useAddToCartMutation = () => {
   })
 }
 
-export const useDeleteItemMutation = () => {
+export const useUpdateItemMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       userId,
       productId,
+      quantity,
     }: {
       userId: number
       productId: number
+      quantity: number
     }) => {
       const { error, success } = await updateProductQuantity(
         userId,
         productId,
-        0
+        quantity
       )
       if (error) throw new Error(error)
       if (success) return success
@@ -94,7 +115,15 @@ export const useDeleteItemMutation = () => {
       ])) as PopulatedCart[]
 
       await queryClient.setQueryData(['cart'], (oldCart: PopulatedCart[]) => {
-        return oldCart.filter(({ id }) => id !== variables.productId)
+        if (variables.quantity === 0) {
+          return oldCart.filter(({ id }) => id !== variables.productId)
+        }
+        return oldCart.map((product) => {
+          if (product.id === variables.productId) {
+            return { ...product, quantity: variables.quantity }
+          }
+          return product
+        })
       })
       return { previousCart }
     },
@@ -104,11 +133,67 @@ export const useDeleteItemMutation = () => {
       }
       toast.error(error.message)
     },
-    onSettled: async () => {
+    onSettled: async (variables) => {
       await queryClient.invalidateQueries({
         queryKey: ['cart'],
       })
-      toast.success('Removed from cart')
+      if (variables) {
+        toast.success(variables)
+      }
+    },
+  })
+}
+
+export const useApplyCouponMutation = () => {
+  const user = useAuthStore((state) => state.user)
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (coupon: number) => {
+      if (!user) throw new Error('User not authenticated')
+      if (coupon == 10) {
+        const { error, success } = await addDiscountCode(user.id, 'DISCOUNT10')
+        if (error) throw new Error(error)
+        if (success) return success
+      }
+      if (coupon == 20) {
+        const { error, success } = await addDiscountCode(user.id, 'DISCOUNT20')
+        if (error) throw new Error(error)
+        if (success) return success
+      }
+      throw new Error('Invalid amount')
+    },
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({
+        queryKey: ['cart', 'discount'],
+      })
+
+      const previousDiscount = (await queryClient.getQueryData([
+        'cart',
+        'discount',
+      ])) as number
+
+      await queryClient.setQueryData(['cart', 'discount'], () => {
+        return variables
+      })
+
+      return { previousDiscount }
+    },
+    onError: async (error, variables, context) => {
+      if (context?.previousDiscount) {
+        await queryClient.setQueryData(
+          ['cart', 'discount'],
+          context.previousDiscount
+        )
+      }
+      toast.error(error.message)
+    },
+    onSettled: async (asd) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['cart', 'discount'],
+      })
+      if (asd) {
+        toast.success(asd)
+      }
     },
   })
 }

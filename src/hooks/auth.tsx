@@ -62,9 +62,10 @@ export const useLogoutMutation = () => {
     },
     onSuccess: async () => {
       setUser(null)
+      router.replace('/')
+      await queryClient.setQueryData(['cart'], () => [])
       await queryClient.invalidateQueries()
       toast.success('Logged out successfully')
-      router.replace('/')
     },
     onError: (error) => {
       toast.error(error.message)

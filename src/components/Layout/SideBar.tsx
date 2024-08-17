@@ -27,16 +27,17 @@ const SideBar = ({ className }: SideBarProps) => {
           {theme === 'light' ? <Sun /> : <Moon />}
         </button>
         {user && <Avataar name={user.name} />}
-          <SideBarButton url={'/'} icon={<Boxes />} />
+          <SideBarButton name='products' url={'/'} icon={<Boxes />} />
         {!user && (
           <>
-              <SideBarButton url={'/login'} icon={<User />} />
-              <SideBarButton url={'/register'} icon={<UserPlus />} />
+              <SideBarButton name='login' url={'/login'} icon={<User />} />
+              <SideBarButton name='register' url={'/register'} icon={<UserPlus />} />
           </>
         )}
         {user && (
           <>
             <SideBarButton
+              name="logout"
               isDisabled={logOutMutation.isPending}
               cb={() => logOutMutation.mutateAsync()}
               icon={<LogOut />}

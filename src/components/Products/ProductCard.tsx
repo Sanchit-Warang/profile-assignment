@@ -48,11 +48,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </div>
       <div className="w-full">
         <center>
-          {!user && (
-            <Button onClick={async () => await handleClick()} className="rounded-xl">
-              Add to cart
-            </Button>
-          )}
           {user && existInCart ? (
             <Button variant="secondary" onClick={() => router.replace('/cart')}>
               Go to Cart

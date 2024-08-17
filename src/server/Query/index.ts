@@ -23,6 +23,7 @@ export const getCart = errHand(async (userId: number) => {
     where: { userId },
     include: {
       products: {
+        orderBy: { createdAt: 'desc' },
         include: {
           product: true,
         },
@@ -39,4 +40,29 @@ export const getCart = errHand(async (userId: number) => {
   })
 
   return res
+})
+
+export const getDiscount = errHand(async (userId: number) => {
+  const user = await verifySession()
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+  if (user.id !== userId) {
+    throw new Error('User doesnt match authenticated')
+  }
+
+  console.log('Sanchit', userId)
+
+  const cart = await db.cart.findUnique({
+    where: { userId },
+    select: { discount: true },
+  })
+
+  console.log('Sanchit', cart)
+
+  if (!cart) {
+    throw new Error('Cart not found')
+  }
+
+  return cart.discount
 })

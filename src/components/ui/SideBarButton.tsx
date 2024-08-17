@@ -1,10 +1,11 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
-// import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 export type SideBarButtonProps = {
   icon: React.ReactNode
+  name?: string
   url?: string
   cb?: () => void
   isDisabled?: boolean
@@ -13,20 +14,24 @@ export type SideBarButtonProps = {
 const SideBarButton = ({
   icon,
   url,
+  name = '',
   cb,
   isDisabled = false,
   className,
   ...props
 }: SideBarButtonProps) => {
   const router = useRouter()
-
+  const pathname = usePathname()
   return (
     <button
       disabled={isDisabled}
       suppressHydrationWarning
       {...props}
       className={cn(
-        'p-3 bg-primary-content text-primary-light rounded-lg',
+        'p-3 rounded-lg flex flex-col justify-center items-center w-full',
+        url == pathname
+          ? 'bg-primary-light  text-primary-content'
+          : 'bg-primary-content text-primary-light',
         className
       )}
       onClick={() => {
@@ -39,6 +44,7 @@ const SideBarButton = ({
       }}
     >
       {icon}
+      <span className="text-xs">{name}</span>
     </button>
   )
 }
