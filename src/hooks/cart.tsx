@@ -61,8 +61,6 @@ export const useAddToCartMutation = () => {
       await queryClient.invalidateQueries({
         queryKey: ['cart'],
       })
-    },
-    onSuccess: () => {
       toast.success('Added to cart')
     },
   })
@@ -110,8 +108,6 @@ export const useDeleteItemMutation = () => {
       await queryClient.invalidateQueries({
         queryKey: ['cart'],
       })
-    },
-    onSuccess: () => {
       toast.success('Removed from cart')
     },
   })
