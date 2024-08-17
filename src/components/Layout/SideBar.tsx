@@ -8,6 +8,7 @@ import { useAuthStore } from '@/zustand/AuthStore'
 import { useLogoutMutation } from '@/hooks/auth'
 import Avataar from '../ui/Avataar'
 import CartSideButton from '../Cart/CartSideButton'
+import Link from 'next/link'
 
 export type SideBarProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {}
 const SideBar = ({ className }: SideBarProps) => {
@@ -27,11 +28,17 @@ const SideBar = ({ className }: SideBarProps) => {
           {theme === 'light' ? <Sun /> : <Moon />}
         </button>
         {user && <Avataar name={user.name} />}
-        <SideBarButton url={'/'} icon={<Boxes />} />
+        <Link href={'/'}>
+          <SideBarButton url={'/'} icon={<Boxes />} />
+        </Link>
         {!user && (
           <>
-            <SideBarButton url={'/login'} icon={<User />} />
+            <Link href={'/login'}>
+              <SideBarButton url={'/login'} icon={<User />} />
+            </Link>
+            <Link href={'/register'}>
             <SideBarButton url={'/register'} icon={<UserPlus />} />
+            </Link>
           </>
         )}
         {user && (

@@ -9,7 +9,6 @@ import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 
 export const useRegistrationMutaion = () => {
-  const setuser = useAuthStore((state) => state.setUser)
   const queryClient = useQueryClient()
   const router = useRouter()
   return useMutation({
@@ -18,9 +17,8 @@ export const useRegistrationMutaion = () => {
       if (error) throw new Error(error)
       if (success) return success
     },
-    onSuccess: async (user) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries()
-      if (user) setuser({ id: user.id, name: user.name, email: user.email })
       toast.success('Registered successfully')
       router.replace('/')
     },
@@ -31,7 +29,6 @@ export const useRegistrationMutaion = () => {
 }
 
 export const useLoginMutation = () => {
-  const setuser = useAuthStore((state) => state.setUser)
   const queryClient = useQueryClient()
   const router = useRouter()
   return useMutation({
@@ -41,9 +38,8 @@ export const useLoginMutation = () => {
       if (error) throw new Error(error)
       if (success) return success
     },
-    onSuccess: async (user) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries()
-      if (user) setuser({ id: user.id, name: user.name, email: user.email })
       toast.success('Logged in successfully')
       router.replace('/')
     },

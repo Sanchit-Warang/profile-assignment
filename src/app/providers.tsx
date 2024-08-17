@@ -10,10 +10,10 @@ import { getQueryClient } from '@/lib/query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'react-hot-toast'
-// import { usePathname } from 'next/navigation'
-// import { useAuthStore } from '@/zustand/AuthStore'
-// import { useCallback, useLayoutEffect } from 'react'
-// import { getSession } from '@/server/Query'
+import { usePathname } from 'next/navigation'
+import { useAuthStore } from '@/zustand/AuthStore'
+import { useCallback, useLayoutEffect } from 'react'
+import { getSession } from '@/server/Query'
 
 type ProvidersProps = {
   children: React.ReactNode
@@ -23,30 +23,30 @@ const Providers = ({ children }: ProvidersProps) => {
   const queryClient = getQueryClient()
 
   // Client Auth setup
-  // const setUser = useAuthStore((state) => state.setUser)
+  const setUser = useAuthStore((state) => state.setUser)
 
-  // const pathName = usePathname()
+  const pathName = usePathname()
 
-  // const fetchSession = useCallback(async () => {
-  //   try {
-  //     const { error, success } = await getSession()
-  //     if (error) {
-  //       throw new Error(error)
-  //     }
-  //     if (success !== undefined) {
-  //       setUser(success)
-  //     }
-  //   } catch (error) {
-  //     setUser(null)
-  //     if (process.env.NODE_ENV === 'development') {
-  //       console.error(error)
-  //     }
-  //   }
-  // }, [])
+  const fetchSession = useCallback(async () => {
+    try {
+      const { error, success } = await getSession()
+      if (error) {
+        throw new Error(error)
+      }
+      if (success !== undefined) {
+        setUser(success)
+      }
+    } catch (error) {
+      setUser(null)
+      if (process.env.NODE_ENV === 'development') {
+        console.error(error)
+      }
+    }
+  }, [])
 
-  // useLayoutEffect(() => {
-  //   fetchSession().finally()
-  // }, [fetchSession, pathName])
+  useLayoutEffect(() => {
+    fetchSession().finally()
+  }, [fetchSession, pathName])
 
   // Client Auth setup done
 
