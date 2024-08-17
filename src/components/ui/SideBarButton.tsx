@@ -1,5 +1,5 @@
 'use client'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 // import { usePathname } from 'next/navigation'
 
@@ -18,7 +18,7 @@ const SideBarButton = ({
   className,
   ...props
 }: SideBarButtonProps) => {
-  // const router = useRouter()
+  const router = useRouter()
 
   return (
     <button
@@ -31,7 +31,7 @@ const SideBarButton = ({
       )}
       onClick={() => {
         if (url) {
-          // router.push(url)
+          router.push(url)
         }
         if (cb) {
           cb()
