@@ -2,6 +2,7 @@
 import { useGetProducts } from '@/hooks/products'
 import ProductCard from './ProductCard'
 import { useAuthStore } from '@/zustand/AuthStore'
+import CartList from '../Cart/CartList'
 
 const ProductList = () => {
   const products = useGetProducts()
@@ -19,6 +20,7 @@ const ProductList = () => {
           return <ProductCard key={product.id} product={product} />
         })}
       </div>
+      <CartList className='hidden' />
     </>
   )
 }
