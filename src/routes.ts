@@ -1,7 +1,7 @@
 /**
  * Private routes that need authentication
  */
-export const privateRoutes = ['/cart']
+export const privateRoutes = ['/cart', '/checkout']
 
 /**
  * Routes that user uses to get authenticates so authenticated users cannot acess

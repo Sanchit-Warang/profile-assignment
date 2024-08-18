@@ -6,6 +6,7 @@ import {
   addItemToCart,
   updateProductQuantity,
   addDiscountCode,
+  emptyCart,
 } from '@/server/Mutations'
 import { getCart, getDiscount } from '@/server/Query'
 import { PopulatedCart } from '@/types'
@@ -194,6 +195,28 @@ export const useApplyCouponMutation = () => {
       if (asd) {
         toast.success(asd)
       }
+    },
+  })
+}
+
+export const useEmptyCartMutation = () => {
+  const user = useAuthStore((state) => state.user)
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error('User not authenticated')
+      const { error, success } = await emptyCart(user.id)
+      if (error) throw new Error(error)
+      if (success) return success
+    },
+    onError: async (error) => {
+      toast.error(error.message)
+    },
+    onSettled: async (variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['cart'],
+      })
+      if (variables) toast.success('Order placed')
     },
   })
 }

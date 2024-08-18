@@ -9,7 +9,7 @@ const Avataar = ({ name, className, ...props }: AvataarProps) => {
     <div
       {...props}
       className={cn(
-        'p-3 w-14 h-14 rounded-full bg-secondary-dark font-bold text-lg text-secondary-content flex justify-center items-center',
+        'p-2 w-full aspect-square rounded-full bg-secondary-dark font-bold text-lg text-secondary-content flex flex-col justify-center items-center',
         className
       )}
     >

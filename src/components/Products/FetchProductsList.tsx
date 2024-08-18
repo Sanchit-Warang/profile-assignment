@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import ProductList from './ProductList'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { getQueryClient } from '@/lib/query'
+import Loader from '../ui/Loader'
 
 const ProductsListData = async () => {
   const queryClient = getQueryClient()
@@ -15,7 +16,7 @@ const ProductsListData = async () => {
       return success
     },
   })
-  
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProductList />
@@ -25,7 +26,7 @@ const ProductsListData = async () => {
 
 const FetchProductsList = () => {
   return (
-    <Suspense fallback={<>Loading ...</>}>
+    <Suspense fallback={<Loader />}>
       <ProductsListData />
     </Suspense>
   )

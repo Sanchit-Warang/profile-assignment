@@ -1,8 +1,13 @@
 'use client'
 import Card from '../ui/Card'
 import { PopulatedCart } from '@/types'
-import { useGetDiscountQuery, useApplyCouponMutation } from '@/hooks/cart'
+import {
+  useGetDiscountQuery,
+  useApplyCouponMutation,
+  useEmptyCartMutation,
+} from '@/hooks/cart'
 import Button from '../ui/Button'
+import { useRouter } from 'next/navigation'
 
 export type CartSummaryProps = {
   cart: PopulatedCart[]
@@ -11,6 +16,9 @@ export type CartSummaryProps = {
 const CartSummary = ({ cart }: CartSummaryProps) => {
   const getDiscount = useGetDiscountQuery()
   const addApplyCoupon = useApplyCouponMutation()
+  const emptyCart = useEmptyCartMutation()
+  const router = useRouter()
+
   const total = cart.reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
   const d = getDiscount.data || 0
   const totalWithDiscount = total - total * (d / 100)
@@ -28,7 +36,7 @@ const CartSummary = ({ cart }: CartSummaryProps) => {
             </div>
           ))}
         </div>
-        {getDiscount.data !== undefined && (
+        {getDiscount.data !== undefined && cart.length > 0 && (
           <>
             <div className="w-full flex justify-between text-lg font-semibold">
               <p>Discount</p>
@@ -57,6 +65,16 @@ const CartSummary = ({ cart }: CartSummaryProps) => {
                 Total: ${totalWithDiscount.toFixed(2)}
               </p>
             </div>
+
+            <Button
+              onClick={async () => {
+                await emptyCart.mutateAsync()
+                router.replace('/checkout')
+              }}
+              isDisabled={emptyCart.isPending}
+            >
+              Checkout
+            </Button>
           </>
         )}
       </Card>

@@ -6,6 +6,7 @@ import Button from '../ui/Button'
 import { useAuthStore } from '@/zustand/AuthStore'
 import { useRouter } from 'next/navigation'
 import { useAddToCartMutation, useGetCartQuery } from '@/hooks/cart'
+import Chip from '../ui/chip'
 
 export type ProductCardProps = {
   product: Product
@@ -32,6 +33,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="rounded-3xl transition-all duration-500 space-y-3 hover:bg-primary/20">
       <div className="overflow-hidden w-full rounded-2xl relative shadow-md">
+        {product.id < 4 && (
+          <Chip
+            className="w-14 absolute -top-1 -left-1 rounded-2xl rounded-l-none rounded-t-none border-none z-10"
+            variant="secondary"
+          >
+            New
+          </Chip>
+        )}
         <Image
           src={product.image}
           alt={product.name}

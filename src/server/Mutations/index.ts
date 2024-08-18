@@ -238,3 +238,40 @@ export const addDiscountCode = errHand(async (userId: number, code: string) => {
 
   return '20% discount applied'
 })
+
+export const emptyCart = errHand(async (userId: number) => {
+  const user = await verifySession()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  if (userId !== user.id) {
+    throw new Error('User does not match')
+  }
+
+  // Ensure userId is defined before proceeding
+  if (!userId) {
+    throw new Error('Invalid user ID')
+  }
+
+  // Find the user's cart
+  const cart = await db.cart.findUnique({
+    where: {
+      userId: userId,
+    },
+  })
+
+  if (!cart) {
+    throw new Error('Cart not found')
+  }
+
+  // Delete all CartProduct entries associated with the cart
+  await db.cartProduct.deleteMany({
+    where: {
+      cartId: cart.id,
+    },
+  })
+
+  return 'Cart emptied successfully'
+})

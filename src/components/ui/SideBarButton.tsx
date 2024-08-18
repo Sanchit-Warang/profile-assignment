@@ -28,7 +28,7 @@ const SideBarButton = ({
       suppressHydrationWarning
       {...props}
       className={cn(
-        'p-3 rounded-lg flex flex-col justify-center items-center w-full',
+        'p-2 rounded-lg flex flex-col justify-center items-center w-full',
         url == pathname
           ? 'bg-primary-light  text-primary-content'
           : 'bg-primary-content text-primary-light',
