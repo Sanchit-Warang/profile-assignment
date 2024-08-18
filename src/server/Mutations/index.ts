@@ -84,7 +84,6 @@ export const addItemToCart = errHand(
       throw new Error('User does not match')
     }
 
-    console.log('Sanchit', userId)
 
     const cart = await db.cart.upsert({
       where: { userId },

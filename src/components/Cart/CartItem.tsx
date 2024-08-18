@@ -30,7 +30,10 @@ const CartItem = ({ className, product, ...props }: CartItemProps) => {
             className="object-cover w-full ease-in-out duration-300 transition-all hover:scale-110"
           />
         </div>
-        <p className="text-lg font-medium">{product.name}</p>
+        <div>
+          <p className="text-lg font-medium">{product.name}</p>
+          <p>${product.price}</p>
+        </div>
         {user && (
           <Button
             className="ml-auto py-2 px-2 min-w-0 rounded-full flex items-center justify-center text-sm"
@@ -83,7 +86,6 @@ const CartItem = ({ className, product, ...props }: CartItemProps) => {
             variant="danger"
             className="min-w-0 px-3 flex  items-center justify-center"
             onClick={async () => {
-              console.log('iran')
               const q = product.quantity - 1
               if (q >= 0) {
                 await updateItemMutation.mutateAsync({

@@ -18,7 +18,7 @@ const buttonVariants = cva(
         success: 'bg-success text-success-content',
       },
       isDisabled: {
-        true: 'opacity-50 cursor-not-allowed',
+        true: 'opacity-50 cursor-not-allowed hover:scale-100',
         false: '',
       },
     },

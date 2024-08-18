@@ -7,7 +7,7 @@ const errHand = <T extends (...args: any[]) => Promise<any>>(cb: T) => {
       const temp = await cb(...args)
       return { success: temp }
     } catch (error: any) {
-      console.log(error)
+      console.error(error)
       return { error: error.message }
     }
   }

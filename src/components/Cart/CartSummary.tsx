@@ -7,6 +7,7 @@ import {
   useEmptyCartMutation,
 } from '@/hooks/cart'
 import Button from '../ui/Button'
+import Loader from '../ui/Loader'
 import { useRouter } from 'next/navigation'
 
 export type CartSummaryProps = {
@@ -36,6 +37,11 @@ const CartSummary = ({ cart }: CartSummaryProps) => {
             </div>
           ))}
         </div>
+        {getDiscount.data === undefined && (
+          <div className="w-full">
+            <Loader />
+          </div>
+        )}
         {getDiscount.data !== undefined && cart.length > 0 && (
           <>
             <div className="w-full flex justify-between text-lg font-semibold">

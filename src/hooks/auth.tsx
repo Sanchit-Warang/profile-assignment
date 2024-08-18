@@ -34,7 +34,6 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: async (data: z.infer<typeof loginBody>) => {
       const { error, success } = await login(data)
-      console.log(error)
       if (error) throw new Error(error)
       if (success) return success
     },
@@ -56,7 +55,6 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: async () => {
       const { error, success } = await logout()
-      console.log(error)
       if (error) throw new Error(error)
       if (success) return success
     },
