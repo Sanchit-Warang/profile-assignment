@@ -23,29 +23,31 @@ const SideBarButton = ({
   const router = useRouter()
   const pathname = usePathname()
   return (
-    <button
-      disabled={isDisabled}
-      suppressHydrationWarning
-      {...props}
-      className={cn(
-        'p-2 rounded-lg flex flex-col justify-center items-center w-full',
-        url == pathname
-          ? 'bg-primary-light  text-primary-content'
-          : 'bg-primary-content text-primary-light',
-        className
-      )}
-      onClick={() => {
-        if (url) {
-          router.push(url)
-        }
-        if (cb) {
-          cb()
-        }
-      }}
-    >
-      {icon}
-      <span className="text-xs">{name}</span>
-    </button>
+    <div className='w-full text-center'>
+      <button
+        disabled={isDisabled}
+        suppressHydrationWarning
+        {...props}
+        className={cn(
+          'p-3 rounded-lg flex flex-col justify-center items-center w-full',
+          url == pathname
+            ? 'bg-primary-light  text-primary-content'
+            : 'bg-primary-content text-primary-light',
+          className
+        )}
+        onClick={() => {
+          if (url) {
+            router.push(url)
+          }
+          if (cb) {
+            cb()
+          }
+        }}
+      >
+        {icon}
+      </button>
+      <p className="text-primary-content font-semibold text-xs mt-1">{name}</p>
+    </div>
   )
 }
 

@@ -134,13 +134,10 @@ export const useUpdateItemMutation = () => {
       }
       toast.error(error.message)
     },
-    onSettled: async (variables) => {
+    onSettled: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['cart'],
       })
-      if (variables) {
-        toast.success(variables)
-      }
     },
   })
 }

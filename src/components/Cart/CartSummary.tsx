@@ -79,7 +79,7 @@ const CartSummary = ({ cart }: CartSummaryProps) => {
               }}
               isDisabled={emptyCart.isPending}
             >
-              Checkout
+              {emptyCart.isPending ? 'Pending' : 'Checkout'}
             </Button>
           </>
         )}
