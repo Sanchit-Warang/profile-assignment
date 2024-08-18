@@ -4,7 +4,7 @@ A Ecommerce Cart Application
 
 [![Profile.fyi Assignment](./public/prod.png)](https://profile-sanchit.vercel.app/)
 
-Demo [https://drive.google.com/file/d/1KQeHVDgoQdq60wY6tnMd1Gq4vbZB1Tfv/view?usp=sharing](video)
+Demo [VIDEO](https://drive.google.com/file/d/1KQeHVDgoQdq60wY6tnMd1Gq4vbZB1Tfv/view?usp=sharing)
 
 ## Tech Stack
 
